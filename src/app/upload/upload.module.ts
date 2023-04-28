@@ -12,9 +12,9 @@ import {MatMenuModule} from "@angular/material/menu";
     declarations: [
         MediaComponent
     ],
-    exports: [
-        MediaComponent
-    ],
+  exports: [
+    MediaComponent,
+  ],
   imports: [
     CommonModule,
     MatTableModule,

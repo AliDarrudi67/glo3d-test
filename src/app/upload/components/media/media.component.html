@@ -1,27 +1,48 @@
 <div class="container">
   <div class="row">
     <div class="col-12 text-center pt-5">
-      <button mat-raised-button color="primary">upload videos</button>
+      <button mat-raised-button color="primary" (click)="openExplorer()">upload videos</button>
+      <input
+        #uploadInput
+        type="file"
+        multiple
+        class="d-none"
+        (change)="selectFile($event)"
+      />
 
       <div class="mat-elevation-z8 mt-3">
         <table mat-table [dataSource]="dataSource">
 
           <!-- Position Column -->
           <ng-container matColumnDef="fileName">
-            <th mat-header-cell *matHeaderCellDef> fileName </th>
-            <td mat-cell *matCellDef="let element"> {{element.fileName}} </td>
+            <th mat-header-cell *matHeaderCellDef> fileName</th>
+            <td mat-cell *matCellDef="let element"> {{element.originalFileName}} </td>
           </ng-container>
 
           <!-- Name Column -->
           <ng-container matColumnDef="startedAt">
-            <th mat-header-cell *matHeaderCellDef> startedAt </th>
-            <td mat-cell *matCellDef="let element"> {{element.startedAt}} </td>
+            <th mat-header-cell *matHeaderCellDef> startedAt</th>
+            <td mat-cell *matCellDef="let element"> {{element.uploadStartTs}} </td>
           </ng-container>
 
           <!-- Weight Column -->
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef> status </th>
-            <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+            <th mat-header-cell *matHeaderCellDef> status</th>
+            <td mat-cell *matCellDef="let element">
+              <div *ngIf="currentFileUpload" class="progress mt-2">
+                <div
+                  class="progress-bar progress-bar-info"
+                  role="progressbar"
+                  attr.aria-valuenow="{{ percentage }}"
+                  aria-valuemin="0"
+                  aria-valuemax="100"
+                  [ngStyle]="{ width: percentage + '%' }"
+                >
+                  {{ percentage }}%
+                </div>
+              </div>
+<!--              {{element.uploadState}}-->
+            </td>
           </ng-container>
 
           <!-- Symbol Column -->
@@ -32,8 +53,9 @@
             <td mat-cell *matCellDef="let element">
               <button mat-button [matMenuTriggerFor]="menu">...</button>
               <mat-menu #menu="matMenu">
-                <button mat-menu-item>Item 1</button>
-                <button mat-menu-item>Item 2</button>
+                <button mat-menu-item>cancel upload</button>
+                <button mat-menu-item>re upload</button>
+                <button mat-menu-item (click)="cancelUpload(element.id)">cancel</button>
               </mat-menu>
             </td>
           </ng-container>
